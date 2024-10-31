@@ -20,6 +20,21 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
+// Serve admin login page
+app.get('/admin/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../backend/views/login.html'));
+});
+
+// Serve admin dashboard page
+app.get('/admin/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../backend/views/admin/dashboard.html'));
+});
+
+// Serve edit post page
+app.get('/admin/edit/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '../backend/views/admin/editPost.html'));
+});
+
 // Fallback route for other static files
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
