@@ -1,19 +1,30 @@
 const Post = require('../models/Post');
-const getAllPosts = async (req, res) => {
-  const posts = await Post.find();
-  res.json(posts);
+const path = require('path');
+exports.getAllPosts = async (req, res) => {
+    const posts = await Post.find();
+    res.json(posts);
 };
-const createPost = async (req, res) => {
-  const post = new Post(req.body);
-  await post.save();
-  res.json(post);
+exports.adminDashboard = async (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/admin/dashboard.html'));
 };
-const editPost = async (req, res) => {
-  const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(post);
+exports.editPostPage = async (req, res) => {
+    const postId = req.params.id;
+    const post = await Post.findById(postId);
+    res.sendFile(path.join(__dirname, '../views/admin/editPost.html'));
 };
-const deletePost = async (req, res) => {
-  await Post.findByIdAndDelete(req.params.id);
-  res.json({ message: 'Post deleted' });
+exports.createPost = async (req, res) => {
+    const { title, content } = req.body;
+    const post = new Post({ title, content });
+    await post.save();
+    res.redirect('/api/posts/admin/dashboard');
 };
-module.exports = { getAllPosts, createPost, editPost, deletePost };
+exports.updatePost = async (req, res) => {
+    const postId = req.params.id;
+    await Post.findByIdAndUpdate(postId, req.body);
+    res.redirect('/api/posts/admin/dashboard');
+};
+exports.deletePost = async (req, res) => {
+    const postId = req.params.id;
+    await Post.findByIdAndDelete(postId);
+    res.redirect('/api/posts/admin/dashboard');
+};
