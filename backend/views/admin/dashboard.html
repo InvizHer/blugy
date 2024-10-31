@@ -1,33 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../../css/styles.css">
 </head>
 <body>
-  <h1>Admin Dashboard</h1>
-  <a href="createPost.html">Create Post</a>
-  <div id="postList"></div>
-  <script>
-    fetch('/api/posts')
-      .then(response => response.json())
-      .then(data => {
-        const postList = document.getElementById('postList');
-        data.forEach(post => {
-          const postElement = document.createElement('div');
-          postElement.innerHTML = `
-            <h3>${post.title}</h3>
-            <button onclick="deletePost('${post._id}')">Delete</button>
-            <a href="editPost.html?id=${post._id}">Edit</a>
-          `;
-          postList.appendChild(postElement);
-        });
-      });
-    function deletePost(id) {
-      fetch(`/api/posts/${id}`, { method: 'DELETE' })
-        .then(() => location.reload());
-    }
-  </script>
+    <h1>Admin Dashboard</h1>
+    <a href="/api/posts/admin/create">Create New Post</a>
+    <h2>Posts</h2>
+    <ul>
+        <% posts.forEach(post => { %>
+            <li>
+                <a href="/api/posts/<%= post._id %>"><%= post.title %></a>
+                <a href="/api/posts/admin/edit/<%= post._id %>">Edit</a>
+                <form action="/api/posts/admin/delete/<%= post._id %>" method="POST" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
 </body>
 </html>
